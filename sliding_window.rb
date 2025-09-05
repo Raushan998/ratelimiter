@@ -67,11 +67,13 @@ class DeviceEngine
         ts_data = REQUEST_STORE[key]
 
         total_requests = 0
-        ts_data.each do |k,v|
-            if k.to_s.to_i >= start_time
-                total_requests += v
-            else
-                ts_data.delete(k)
+        @mutex.synchronize do
+            ts_data.each do |k,v|
+                if k.to_s.to_i >= start_time
+                    total_requests += v
+                else
+                    ts_data.delete(k)
+                end
             end
         end       
 
